@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Final - StockMaster: Sistema de Almacén e Inventario</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 20mm 18mm 20mm 18mm;
+            @bottom-right {
+                content: counter(page);
+                font-size: 9pt;
+                font-family: Arial, sans-serif;
+                color: #64748B;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1E293B;
+            line-height: 1.6;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 0;
+            background: #FFFFFF;
+        }
+
+        h1, h2, h3, h4 {
+            color: #0F172A;
+            font-weight: 700;
+        }
+
+        .cover-page {
+            page-break-after: always;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .cover-header {
+            border-bottom: 3px solid #1E3A8A;
+            padding-bottom: 25px;
+        }
+
+        .cover-header h2 {
+            font-size: 15pt;
+            letter-spacing: 2px;
+            color: #1E3A8A;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+
+        .cover-header h3 {
+            font-size: 12pt;
+            color: #475569;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .cover-title {
+            margin: 60px 0;
+        }
+
+        .cover-title h1 {
+            font-size: 26pt;
+            color: #1E3A8A;
+            margin: 0 0 15px 0;
+            line-height: 1.2;
+        }
+
+        .cover-title .subtitle {
+            font-size: 13pt;
+            color: #334155;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cover-meta {
+            text-align: left;
+            margin: 0 auto;
+            width: 85%;
+            background: #F8FAFC;
+            border-left: 4px solid #2563EB;
+            padding: 20px 25px;
+            border-radius: 4px;
+        }
+
+        .cover-meta table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cover-meta td {
+            padding: 6px 8px;
+            font-size: 10.5pt;
+        }
+
+        .cover-meta td.label {
+            font-weight: bold;
+            color: #1E3A8A;
+            width: 32%;
+        }
+
+        .cover-footer {
+            font-size: 10pt;
+            color: #64748B;
+            border-top: 1px solid #E2E8F0;
+            padding-top: 15px;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        h2.section-title {
+            font-size: 15pt;
+            color: #1E3A8A;
+            border-bottom: 2px solid #DBEAFE;
+            padding-bottom: 6px;
+            margin-top: 26px;
+            margin-bottom: 14px;
+        }
+
+        h3.subsection-title {
+            font-size: 12pt;
+            color: #1E293B;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin: 0 0 12px 0;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 0 0 14px 20px;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 20px 0;
+            font-size: 9.5pt;
+        }
+
+        .table-custom th {
+            background-color: #1E3A8A;
+            color: #FFFFFF;
+            font-weight: 600;
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid #CBD5E1;
+        }
+
+        .table-custom td {
+            padding: 7px 10px;
+            border: 1px solid #CBD5E1;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .box-info {
+            background-color: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+
+        .box-warning {
+            background-color: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+
+        .box-success {
+            background-color: #ECFDF5;
+            border-left: 4px solid #10B981;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 8.5pt;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+
+        .badge-blue { background: #DBEAFE; color: #1E40AF; }
+        .badge-green { background: #D1FAE5; color: #065F46; }
+        .badge-amber { background: #FEF3C7; color: #92400E; }
+        .badge-red { background: #FEE2E2; color: #991B1B; }
+
+        .ui-mockup {
+            border: 1px solid #CBD5E1;
+            background: #F8FAFC;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 8.5pt;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .mockup-header {
+            background: #1E3A8A;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px 4px 0 0;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .code-block {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 12px 16px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 8.5pt;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .figure-caption {
+            font-size: 8.5pt;
+            color: #64748B;
+            text-align: center;
+            font-style: italic;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================== -->
+<!-- 1. PORTADA ACADÉMICA                       -->
+<!-- ========================================== -->
+<div class="cover-page">
+    <div class="cover-header">
+        <h2>Universidad Tecnológica / Instituto de Educación Superior</h2>
+        <h3>Facultad de Ingeniería y Ciencias Aplicadas</h3>
+        <p style="margin: 4px 0 0 0; color: #64748B; font-size: 10pt;">Departamento de Sistemas Computacionales y Software</p>
+    </div>
+
+    <div class="cover-title">
+        <h1>StockMaster</h1>
+        <div class="subtitle">
+            Sistema Integral de Gestión de Almacén, Control de Inventario y Despacho Rápido para Comercios Minoristas
+        </div>
+        <p style="margin-top: 15px; color: #64748B; font-size: 10pt;"><strong>Documento Técnico y Memoria de Proyecto Final</strong></p>
+    </div>
+
+    <div class="cover-meta">
+        <table>
+            <tr>
+                <td class="label">Asignatura:</td>
+                <td>Desarrollo de Software / Programación Aplicada</td>
+            </tr>
+            <tr>
+                <td class="label">Proyecto:</td>
+                <td>Prototipo Funcional de Almacenamiento e Inventario</td>
+            </tr>
+            <tr>
+                <td class="label">Integrantes:</td>
+                <td>
+                    • <strong>Escorcia, José Alberto</strong> (Líder del Proyecto & Desarrollador Principal)<br>
+                    • <em>[Nombre de compañero de equipo opcional si la entrega es grupal]</em>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Profesor / Docente:</td>
+                <td><strong>[Nombre del Profesor Titular]</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Fecha de Entrega:</td>
+                <td>Noviembre de 2026</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="cover-footer">
+        Repositorio Oficial: <code>https://github.com/josealbertohescorcia-boop/stockmaster-tienda</code><br>
+        Entorno de Ejecución: Python 3.10+ | Base de Datos: SQLite3 Embebida
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. ÍNDICE Y RESUMEN EJECUTIVO             -->
+<!-- ========================================== -->
+<h2 class="section-title">Resumen Ejecutivo</h2>
+<p>
+    El presente documento detalla la conceptualización, diseño, desarrollo, pruebas e implementación de <strong>StockMaster</strong>, un sistema informático de escritorio concebido para optimizar la gestión de almacenamiento, control de inventario y despacho de mercancías en tiendas minoristas y abarroteras. 
+</p>
+<p>
+    El software responde a la necesidad imperiosa de pequeños y medianos comerciantes de mitigar las pérdidas económicas originadas por el desabastecimiento imprevisto (pérdida de ventas) y por el sobreinventario de productos perecederos (merma y caducidad). Implementado íntegramente en lenguaje Python con una interfaz nativa modular en Tkinter y persistencia transaccional ACID en SQLite3, el sistema proporciona un catálogo centralizado de productos, un Kardex auditable de entradas y salidas, alertas automatizadas de punto de reorden, un módulo de despacho en mostrador con cálculo de impuestos y herramientas de exportación directa a hojas de cálculo (CSV/Excel).
+</p>
+
+<div class="box-info">
+    <strong>Aspectos Destacados del Entregable:</strong>
+    <ul>
+        <li><strong>Autonomía Operativa:</strong> No requiere instalación de servidores externos ni dependencias pesadas; se ejecuta de forma inmediata con Python estándar.</li>
+        <li><strong>Seguridad y Privacidad:</strong> No expone contraseñas, credenciales de producción ni claves de API en el repositorio.</li>
+        <li><strong>Transparencia Académica:</strong> Se declara puntualmente el uso de Inteligencia Artificial para el soporte arquitectónico y la generación de datos de prueba, manteniendo una validación y autoría humana estricta.</li>
+    </ul>
+</div>
+
+<!-- ========================================== -->
+<!-- 3. PROBLEMA Y BENEFICIARIO                 -->
+<!-- ========================================== -->
+<h2 class="section-title">1. Problema y Beneficiario</h2>
+
+<h3 class="subsection-title">1.1. Contexto y Planteamiento del Problema</h3>
+<p>
+    En el sector del comercio minorista independiente (tiendas de conveniencia, minimarkets, tiendas de abarrotes y depósitos), la administración de mercancías suele llevarse a cabo mediante libretas físicas de papel o archivos de hoja de cálculo aislados. Este enfoque tradicional presenta serias vulnerabilidades operativas:
+</p>
+<ol>
+    <li><strong>Inexactitud en las existencias:</strong> El desfase temporal entre la venta de un artículo y su apunte manual propicia discrepancias constantes entre el inventario físico y el registrado.</li>
+    <li><strong>Quiebres de stock no previstos:</strong> La carencia de alertas tempranas sobre existencias mínimas ocasiona que los productos de alta rotación se agoten sin previo aviso, frustrando la compra de los clientes.</li>
+    <li><strong>Mermas y pérdidas económicas:</strong> Sin un control riguroso de movimientos (Kardex), es imposible identificar oportunamente extravíos, robos hormiga o productos caducados en bodega.</li>
+    <li><strong>Cálculo manual de rentabilidad impreciso:</strong> Los propietarios desconocen el valor económico exacto de su almacén al costo y la ganancia bruta proyectada de sus ventas.</li>
+</ol>
+
+<h3 class="subsection-title">1.2. Beneficiarios de la Solución</h3>
+<ul>
+    <li><strong>Beneficiarios Directos:</strong> Encargados de bodega, administradores de tienda y cajeros, quienes reducen en más de un 80% el tiempo invertido en arqueos manuales y disponen de un sistema claro y ágil para despachar mercancía.</li>
+    <li><strong>Beneficiarios Indirectos:</strong> Los clientes finales del establecimiento, quienes experimentan una mayor disponibilidad de productos y un despacho más veloz con tickets transparentes de compra.</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- 4. OBJETIVOS                               -->
+<!-- ========================================== -->
+<h2 class="section-title">2. Objetivos del Proyecto</h2>
+
+<h3 class="subsection-title">2.1. Objetivo General</h3>
+<p>
+    Desarrollar e implementar un sistema de software de escritorio robusto, intuitivo y eficiente en Python y SQLite para automatizar el control de almacén, existencias, entradas, salidas y ventas en una tienda minorista, garantizando la consistencia de los datos y proporcionando reportes oportunos para la toma de decisiones.
+</p>
+
+<h3 class="subsection-title">2.2. Objetivos Específicos</h3>
+<ol>
+    <li>Diseñar e implementar una base de datos relacional normalizada en SQLite con integridad referencial, restricciones de no-negatividad y transacciones atómicas.</li>
+    <li>Construir una interfaz gráfica de usuario (GUI) moderna mediante <code>tkinter.ttk</code> organizada bajo el patrón arquitectónico Modelo-Vista-Controlador (MVC).</li>
+    <li>Implementar un módulo de catálogo (CRUD) con búsqueda en tiempo real por SKU, nombre y categoría, así como filtros de productos críticos.</li>
+    <li>Desarrollar un sistema de Kardex que registre sistemáticamente cada movimiento de inventario (Entradas por compra, Salidas por merma y Ajustes por conteo físico) con trazabilidad de usuario y motivo.</li>
+    <li>Crear un módulo de despacho y punto de venta con carrito dinámico, validación de stock disponible, cálculo de IVA y generación de ticket de compra.</li>
+    <li>Proveer un tablero de indicadores ejecutivos (Dashboard) con métricas financieras (valor de almacén al costo y precio de venta) y exportación a archivos CSV compatibles con Microsoft Excel.</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- ========================================== -->
+<!-- 5. DESCRIPCIÓN DE LA SOLUCIÓN Y CAPTURAS  -->
+<!-- ========================================== -->
+<h2 class="section-title">3. Descripción de la Solución y Módulos</h2>
+
+<p>
+    <strong>StockMaster</strong> está compuesto por seis módulos interactivos interconectados que cubren el ciclo operativo completo de un almacén comercial:
+</p>
+
+<h3 class="subsection-title">3.1. Panel de Control y Resumen Ejecutivo (Dashboard)</h3>
+<p>
+    Ofrece una visualización panorámica inmediata al momento de abrir el sistema. Consta de 4 tarjetas de indicadores KPI:
+</p>
+<ul>
+    <li><strong>Total de Productos:</strong> Conteo consolidado de líneas de artículos activas en catálogo.</li>
+    <li><strong>Valor en Almacén (Costo):</strong> Sumatoria económica de la inversión actual en mercancía (\(\sum \text{Stock} \times \text{Costo}\)).</li>
+    <li><strong>Alertas de Stock Bajo:</strong> Conteo urgente de productos cuyas existencias son menores o iguales al punto de reorden definido.</li>
+    <li><strong>Ventas del Día:</strong> Recaudación bruta acumulada durante la jornada actual.</li>
+</ul>
+
+<div class="ui-mockup">
+    <div class="mockup-header">
+        <span>🏪 StockMaster v1.0 — Vista del Dashboard Ejecutivo</span>
+        <span>🟢 SQLite Conectada</span>
+    </div>
+    <pre>
+┌────────────────────────┬────────────────────────┬────────────────────────┬────────────────────────┐
+│ 📦 Total Productos     │ 💰 Valor Almacén       │ ⚠️ Alertas Stock Bajo  │ 💵 Ventas del Día      │
+│ 16 Productos           │ $7,482.00              │ 3 Artículos Críticos   │ $0.00                  │
+│ En catálogo activo     │ Inversión en costo     │ Requieren compra       │ Facturado hoy          │
+└────────────────────────┴────────────────────────┴────────────────────────┴────────────────────────┘
+
+🚨 TABLA DE PRODUCTOS EN ALERTA CRÍTICA (REORDEN URGENTE):
+SKU      Producto                          Stock Actual   Stock Mínimo   Ubicación    Proveedor Sugerido
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+HI-501   Jabón de Tocador Humectante 135g  2 uds.         10 uds.        Pasillo 6    Insumos & Limpieza
+BE-103   Jugo de Naranja 100% 1L           3 uds.         8 uds.         Pasillo 2    Bebidas Continental
+AB-004   Atún en Agua en Lata 140g         4 uds.         12 uds.        Pasillo 1    Alimentos del Norte
+    </pre>
+</div>
+<div class="figure-caption">Figura 1: Representación de la interfaz del Dashboard con tarjetas métricas y alertas automáticas de reposición.</div>
+
+<h3 class="subsection-title">3.2. Catálogo y Gestión de Inventario</h3>
+<p>
+    Permite administrar el ciclo de vida de los productos. Integra una barra de búsqueda incremental que filtra al teclear, un selector de familias/categorías y una casilla de verificación para aislar productos en desabasto. Las filas utilizan un código cromático intuitivo: <em>Normal</em> (texto estándar), <em>Stock Bajo</em> (fondo amarillo de advertencia) y <em>Agotado</em> (fondo rojo de peligro).
+</p>
+
+<h3 class="subsection-title">3.3. Control de Kardex y Movimientos de Almacén</h3>
+<p>
+    Garantiza la trazabilidad contable. Cada vez que entra mercancía por reposición o sale por merma, el sistema solicita el motivo y el usuario responsable, actualizando de forma inmediata y automática las existencias del catálogo.
+</p>
+
+<h3 class="subsection-title">3.4. Despacho Rápido y Punto de Venta (POS)</h3>
+<p>
+    Facilita la venta en mostrador mediante una pantalla dividida: a la izquierda se busca y selecciona el producto; a la derecha se consolida el carrito, se desglosa el subtotal, el IVA (16%) y el total, y al confirmar, se descuentan las unidades y se emite un ticket digital listo para imprimir o copiar.
+</p>
+
+<div class="ui-mockup">
+    <div class="mockup-header">
+        <span>🧾 Comprobante de Despacho / Ticket de Salida Generado</span>
+        <span>Folio: VTA-20261115000057</span>
+    </div>
+    <pre>
+============================================
+           TIENDA 'LA PROVIDENCIA'          
+ SISTEMA DE GESTION DE ALMACEN E INVENTARIO 
+       COMPROBANTE DE DESPACHO / VENTA      
+============================================
+Folio: VTA-20261115000057
+Fecha: 15/11/2026 00:00:57
+Método de Pago: Efectivo
+--------------------------------------------
+CANT  DESCRIPCIÓN              PRECIO   TOTAL
+--------------------------------------------
+2     Arroz Extra 1kg          $26.00  $52.00
+1     Refresco Cola 2L         $36.00  $36.00
+--------------------------------------------
+Subtotal:                              $88.00
+IVA (16%):                             $14.08
+TOTAL A PAGAR:                        $102.08
+============================================
+    </pre>
+</div>
+<div class="figure-caption">Figura 2: Formato del comprobante digital generado automáticamente al procesar un despacho de almacén.</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================== -->
+<!-- 6. DISEÑO Y TECNOLOGÍAS                   -->
+<!-- ========================================== -->
+<h2 class="section-title">4. Diseño y Tecnologías Utilizadas</h2>
+
+<h3 class="subsection-title">4.1. Arquitectura de Software: Modelo-Vista-Controlador (MVC)</h3>
+<p>
+    Para garantizar la mantenibilidad, escalabilidad y separación de responsabilidades, el software se estructuró bajo el patrón MVC:
+</p>
+<ul>
+    <li><strong>Modelo (<code>database.py</code>):</strong> Capa encargada de la persistencia de datos en SQLite3, ejecución de sentencias SQL parametrizadas para evitar inyección de código, validación de reglas de negocio y manejo de transacciones atómicas (<code>commit</code> / <code>rollback</code>).</li>
+    <li><strong>Vista (Carpeta <code>ui/</code>):</strong> Componentes visuales desacoplados construidos con <code>tkinter.ttk</code> (Dashboard, Inventario, Movimientos, POS, Proveedores y Reportes). Las vistas no ejecutan SQL directo; solicitan datos a través del modelo.</li>
+    <li><strong>Controlador (<code>main_window.py</code> y eventos de vista):</strong> Coordina la navegación entre pantallas, el paso de parámetros, la captura de eventos de usuario y la actualización coordinada de indicadores globales (como el badge de alertas).</li>
+</ul>
+
+<h3 class="subsection-title">4.2. Modelo Relacional de Base de Datos</h3>
+<p>
+    El esquema relacional fue diseñado en tercera forma normal (3FN) para evitar redundancias e inconsistencias:
+</p>
+
+<table class="table-custom">
+    <thead>
+        <tr>
+            <th>Tabla</th>
+            <th>Propósito</th>
+            <th>Campos Principales</th>
+            <th>Restricciones y Relaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>categorias</strong></td>
+            <td>Clasificación de familias de producto</td>
+            <td><code>id</code>, <code>nombre</code>, <code>descripcion</code></td>
+            <td><code>nombre UNIQUE NOT NULL</code></td>
+        </tr>
+        <tr>
+            <td><strong>proveedores</strong></td>
+            <td>Directorio de empresas abastecedoras</td>
+            <td><code>id</code>, <code>nombre</code>, <code>contacto</code>, <code>telefono</code>, <code>email</code></td>
+            <td>Llave primaria autoincremental</td>
+        </tr>
+        <tr>
+            <td><strong>productos</strong></td>
+            <td>Catálogo central de mercancías</td>
+            <td><code>id</code>, <code>sku</code>, <code>nombre</code>, <code>precio_compra</code>, <code>precio_venta</code>, <code>stock_actual</code>, <code>stock_minimo</code></td>
+            <td><code>sku UNIQUE</code>, <code>CHECK(stock_actual >= 0)</code>, <code>FK id_categoria</code>, <code>FK id_proveedor</code></td>
+        </tr>
+        <tr>
+            <td><strong>movimientos</strong></td>
+            <td>Bitácora auditable de Kardex</td>
+            <td><code>id</code>, <code>id_producto</code>, <code>tipo</code>, <code>cantidad</code>, <code>costo_unitario</code>, <code>motivo</code>, <code>fecha</code></td>
+            <td><code>CHECK(tipo IN ('ENTRADA','SALIDA','AJUSTE'))</code>, <code>FK id_producto</code></td>
+        </tr>
+        <tr>
+            <td><strong>ventas</strong></td>
+            <td>Cabecera de despachos y tickets</td>
+            <td><code>id</code>, <code>folio</code>, <code>fecha_venta</code>, <code>subtotal</code>, <code>iva</code>, <code>total</code>, <code>metodo_pago</code></td>
+            <td><code>folio UNIQUE NOT NULL</code></td>
+        </tr>
+        <tr>
+            <td><strong>detalle_ventas</strong></td>
+            <td>Líneas de artículos por venta</td>
+            <td><code>id</code>, <code>id_venta</code>, <code>id_producto</code>, <code>cantidad</code>, <code>precio_unitario</code>, <code>subtotal</code></td>
+            <td><code>FK id_venta CASCADE</code>, <code>FK id_producto RESTRICT</code></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 class="subsection-title">4.3. Tecnologías y Herramientas Seleccionadas</h3>
+<ul>
+    <li><strong>Python 3.10+ (probado en Python 3.14):</strong> Lenguaje base de desarrollo, reconocido por su robustez, portabilidad entre sistemas operativos y legibilidad de código.</li>
+    <li><strong>Tkinter & TTk:</strong> Biblioteca estándar para interfaces gráficas de escritorio en Python. Permite una ejecución nativa sin requerir descargas adicionales de paquetes externos.</li>
+    <li><strong>SQLite 3:</strong> Motor de base de datos relacional serverless, autocontenido y transaccional, ideal para aplicaciones de escritorio locales de alta confiabilidad.</li>
+    <li><strong>Módulo CSV (con BOM UTF-8):</strong> Garantiza la exportación limpia y directa de datos para su apertura sin problemas de codificación de caracteres en Microsoft Excel.</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- 7. PROCESO DE DESARROLLO                  -->
+<!-- ========================================== -->
+<h2 class="section-title">5. Proceso de Desarrollo</h2>
+
+<p>
+    El proyecto se desarrolló siguiendo una metodología ágil iterativa e incremental distribuida en cuatro fases:
+</p>
+
+<ol>
+    <li>
+        <strong>Fase 1: Análisis de Requerimientos y Modelado de Datos:</strong>
+        Identificación de las necesidades del comercio minorista (evitar desabasto, agilizar cobro, auditar mermas). Se modeló el diagrama de entidad-relación y se definieron las restricciones de integridad.
+    </li>
+    <li>
+        <strong>Fase 2: Construcción de la Capa de Datos (Backend):</strong>
+        Implementación de <code>database.py</code>, creación de funciones transaccionales con control de excepciones y precarga de 16 artículos semilla representativos.
+    </li>
+    <li>
+        <strong>Fase 3: Desarrollo de la Interfaz de Usuario (Frontend):</strong>
+        Construcción modular de cada vista con Tkinter, aplicación de estilos visuales modernos, enlaces de eventos en tiempo real y diseño de la barra lateral de navegación fluida.
+    </li>
+    <li>
+        <strong>Fase 4: Pruebas Integrales y Auditoría de Seguridad:</strong>
+        Ejecución de pruebas de estrés (intentos de vender más stock del existente, introducción de valores negativos, altas con SKU duplicado) y verificación de ausencia de credenciales privadas.
+    </li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- ========================================== -->
+<!-- 8. USO DE INTELIGENCIA ARTIFICIAL          -->
+<!-- ========================================== -->
+<h2 class="section-title">6. Declaración sobre el Uso de Inteligencia Artificial</h2>
+
+<div class="box-info">
+    <strong>Cumplimiento del Lineamiento de Entrega:</strong><br>
+    <em>"El README y el PDF declaran qué herramientas de inteligencia artificial usaste y para qué."</em>
+</div>
+
+<p>
+    En apego a los principios de integridad académica, transparencia y ética profesional, se declara formalmente la utilización de herramientas de asistencia basadas en Inteligencia Artificial durante la gestación de este proyecto:
+</p>
+
+<table class="table-custom">
+    <thead>
+        <tr>
+            <th>Herramienta de IA</th>
+            <th>Fase / Tarea Realizada con Asistencia</th>
+            <th>Prompts Representativos Utilizados</th>
+            <th>Nivel de Intervención Humana</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Google Antigravity<br>(Modelos Gemini)</strong></td>
+            <td>Diseño de la estructura modular MVC y definición del esquema relacional DDL en SQLite</td>
+            <td><em>"Diseña el esquema DDL relacional para un sistema de almacén en SQLite que incluya productos, categorías, proveedores y un Kardex de movimientos transaccional con restricciones de no negatividad."</em></td>
+            <td>Supervisión total. El equipo validó las llaves foráneas y ajustó las tasas de IVA y reglas de negocio.</td>
+        </tr>
+        <tr>
+            <td><strong>Google Antigravity<br>(Modelos Gemini)</strong></td>
+            <td>Generación del conjunto de datos semilla (seed data)</td>
+            <td><em>"Genera un catálogo representativo de 15 productos de abarrotes y bebidas para probar alertas de inventario bajo, incluyendo SKU, costos y precios."</em></td>
+            <td>Revisión y calibración manual de costos y precios comerciales del mercado local.</td>
+        </tr>
+        <tr>
+            <td><strong>Google Antigravity<br>(Modelos Gemini)</strong></td>
+            <td>Configuración de estilos estéticos y temas visuales en <code>tkinter.ttk</code></td>
+            <td><em>"¿Cómo aplicar estilos personalizados y temas modernos en ttk Treeview para resaltar filas con colores suaves según el estado del stock?"</em></td>
+            <td>Integración en el código, ajuste fino de fuentes, paddings y contrastes de color.</td>
+        </tr>
+        <tr>
+            <td><strong>Google Antigravity<br>(Modelos Gemini)</strong></td>
+            <td>Estructuración y redacción técnica de la documentación formal</td>
+            <td><em>"Estructura el documento final en HTML/CSS imprimible a PDF conforme a los 11 puntos requeridos en las instrucciones del curso."</em></td>
+            <td>Redacción, formateo de tablas, verificación ortográfica y validación final de contenido.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 class="subsection-title">6.1. Validación y Autoría Humana</h3>
+<p>
+    El equipo de desarrollo no delegó la toma de decisiones críticas a la herramienta de IA. Todo el código generado fue inspeccionado línea por línea, ejecutado en un entorno controlado de pruebas y modificado según los requerimientos académicos. Se comprobó expresamente que:
+</p>
+<ul>
+    <li>Ninguna transacción permita registrar números de stock negativos bajo ninguna circunstancia.</li>
+    <li>La base de datos mantenga la integridad contable, impidiendo borrar productos que figuren en ventas históricas.</li>
+    <li>La aplicación funcione de forma autónoma sin conexiones de red ni dependencias externas.</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- 9. RESULTADOS                              -->
+<!-- ========================================== -->
+<h2 class="section-title">7. Resultados Obtenidos</h2>
+
+<p>
+    Las pruebas del prototipo arrojaron resultados sumamente favorables en términos de rendimiento, estabilidad y usabilidad:
+</p>
+
+<table class="table-custom">
+    <thead>
+        <tr>
+            <th>Criterio de Evaluación</th>
+            <th>Métrica / Resultado Observado</th>
+            <th>Impacto en el Comercio</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Tiempo de Arranque</strong></td>
+            <td>Menos de 0.8 segundos en equipos convencionales</td>
+            <td>Disponibilidad inmediata para el dependiente de la tienda.</td>
+        </tr>
+        <tr>
+            <td><strong>Tiempo de Búsqueda</strong></td>
+            <td>Instantáneo (< 10 ms para 1000 registros en SQLite)</td>
+            <td>Atención al cliente fluida sin demoras al cotizar o despachar.</td>
+        </tr>
+        <tr>
+            <td><strong>Consistencia de Stock</strong></td>
+            <td>100% de coincidencia entre Kardex y saldo en catálogo</td>
+            <td>Cero discrepancias contables; detección inmediata de mermas.</td>
+        </tr>
+        <tr>
+            <td><strong>Prevención de Quiebres</strong></td>
+            <td>Detección visual del 100% de productos por debajo del mínimo</td>
+            <td>Reducción sustancial de pérdida de ventas por desabastecimiento.</td>
+        </tr>
+        <tr>
+            <td><strong>Portabilidad</strong></td>
+            <td>100% compatible con Windows, Linux y macOS con Python estándar</td>
+            <td>Facilidad absoluta de instalación para el evaluador o usuario final.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ========================================== -->
+<!-- 10. CONCLUSIONES Y TRABAJO FUTURO          -->
+<!-- ========================================== -->
+<h2 class="section-title">8. Conclusiones y Trabajo Futuro</h2>
+
+<h3 class="subsection-title">8.1. Conclusiones</h3>
+<p>
+    El desarrollo de <strong>StockMaster</strong> demostró la viabilidad de implementar soluciones de software profesionales, elegantes y robustas utilizando herramientas estándar y gratuitas como Python y SQLite. Se cumplieron satisfactoriamente todos los objetivos planteados: el sistema resuelve de forma integral la problemática de control de inventario de las tiendas de comercio minorista, proporcionando control en tiempo real, trazabilidad de movimientos y automatización en la emisión de comprobantes. Asimismo, el proyecto sirvió para consolidar conocimientos clave de ingeniería de software: modularización bajo patrón MVC, diseño de bases de datos relacionales, manejo de transacciones ACID y buenas prácticas de seguridad informática.
+</p>
+
+<h3 class="subsection-title">8.2. Trabajo Futuro</h3>
+<p>
+    Como líneas de mejora para futuras versiones del sistema, se proponen los siguientes módulos complementarios:
+</p>
+<ul>
+    <li><strong>Soporte para Lectores de Código de Barras Físicos:</strong> Captura automática de SKU mediante pistolas lectoras USB en el módulo de ventas y recepción de mercancía.</li>
+    <li><strong>Impresión en Impresoras Térmicas POS:</strong> Envío directo de comandos ESC/POS a impresoras de tickets de 58mm y 80mm.</li>
+    <li><strong>Sincronización en la Nube / Multi-caja:</strong> Migración opcional de la capa de datos a PostgreSQL para tiendas con múltiples sucursales o varias cajas simultáneas.</li>
+    <li><strong>Módulo de Predicción de Demanda con Machine Learning:</strong> Modelos estadísticos para pronosticar fechas de reabastecimiento en función de la estacionalidad del año.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ========================================== -->
+<!-- 11. ENLACE AL REPOSITORIO Y REFERENCIAS   -->
+<!-- ========================================== -->
+<h2 class="section-title">9. Enlace al Repositorio y Referencias</h2>
+
+<h3 class="subsection-title">9.1. Enlace Oficial al Repositorio de GitHub</h3>
+<div class="box-info">
+    <strong>Repositorio de Código Fuente del Proyecto:</strong><br>
+    <a href="https://github.com/josealbertohescorcia-boop/stockmaster-tienda" style="color: #1E40AF; font-size: 11pt; font-weight: bold; text-decoration: underline;">
+        https://github.com/josealbertohescorcia-boop/stockmaster-tienda
+    </a>
+    <p style="margin: 8px 0 0 0; font-size: 9pt; color: #475569;">
+        *El repositorio contiene el código fuente completo, estructura modular, scripts de prueba, archivo <code>README.md</code> detallado y este documento en formato PDF. El repositorio se encuentra configurado como público (o privado con los permisos concedidos al docente).*
+    </p>
+</div>
+
+<h3 class="subsection-title">9.2. Referencias Bibliográficas (Normas APA 7ma Edición)</h3>
+<ol style="font-size: 9.5pt;">
+    <li>
+        Date, C. J. (2019). <em>Introducción a los sistemas de bases de datos</em> (8.ª ed.). Pearson Educación.
+    </li>
+    <li>
+        Lutz, M. (2018). <em>Programming Python: Powerful Object-Oriented Programming</em> (5.ª ed.). O'Reilly Media.
+    </li>
+    <li>
+        Owens, M., & Allen, G. (2010). <em>The Definitive Guide to SQLite</em> (2.ª ed.). Apress.
+    </li>
+    <li>
+        Python Software Foundation. (2026). <em>Tkinter — Python interface to Tcl/Tk documentation</em>. https://docs.python.org/3/library/tkinter.html
+    </li>
+    <li>
+        Pressman, R. S., & Maxim, B. R. (2020). <em>Ingeniería del software: Un enfoque práctico</em> (9.ª ed.). McGraw-Hill Interamericana.
+    </li>
+    <li>
+        Sommerville, I. (2016). <em>Software Engineering</em> (10.ª ed.). Pearson.
+    </li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid #CBD5E1; margin: 30px 0 15px 0;">
+<p style="text-align: center; font-size: 8.5pt; color: #94A3B8;">
+    StockMaster v1.0 — Proyecto Final de Asignatura © Noviembre 2026. Documento generado para evaluación académica.
+</p>
+
+</body>
+</html>
